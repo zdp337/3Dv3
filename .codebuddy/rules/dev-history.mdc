@@ -375,6 +375,40 @@ AI Agent 在每次开发任务完成后，**必须更新此文件**，追加本�
 ### 公共文件
 - 当前版本进入 timeout 兼容排查状态；若仍报错，需要补充微信开发者工具控制台完整首条业务错误或截图。
 
+---
+
+## 迭代 16：微信开发者工具 timeout 二次排查页
+
+### PM（组长）工作
+- 基于用户截图确认仍为微信内部 `WAServiceMainContext timeout`，缺少业务代码报错行。
+- 安排新增最小启动自检页，先判断小程序工程是否能被开发者工具正常启动，再定位正式首页。
+
+### 研发成员 A — 启动自检页与本地配置降级
+- **负责模块**: `miniprogram/app / miniprogram/pages/debug / project.private`
+- **工作内容**:
+  - 调整本地 `project.private.config.json`，关闭 API Hook、独立 API Host Process 与热重载，降低开发者工具内部 timeout 风险。
+  - 新增最小启动页 `pages/debug/debug`，用于排除正式首页复杂模板和业务逻辑。
+  - 将 `pages/debug/debug` 临时设为首屏，页面提供“进入首页”按钮继续定位。
+- **修改文件**:
+  - `project.private.config.json`（本地修改，不提交）
+  - `miniprogram/app.json`（修改）
+  - `miniprogram/pages/debug/debug.json`（新建）
+  - `miniprogram/pages/debug/debug.wxml`（新建）
+  - `miniprogram/pages/debug/debug.wxss`（新建）
+  - `miniprogram/pages/debug/debug.js`（新建）
+  - `.codebuddy/rules/dev-history.mdc`（修改）
+
+### QA Agent 工作
+- **负责模块**: `启动链路定位`
+- **工作内容**:
+  - 若自检页可显示，说明工程启动正常，问题集中在正式首页。
+  - 若自检页仍 timeout，说明问题更偏向开发者工具环境/基础库/项目私有配置。
+
+### 公共文件
+- 当前小程序已进入“先启动自检页，再跳正式首页”的定位模式。
+
+
+
 
 
 

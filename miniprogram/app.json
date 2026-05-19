@@ -1,7 +1,9 @@
 {
   "pages": [
-    "pages/index/index"
+    "pages/debug/debug"
   ],
+
+
   "window": {
     "navigationBarTitleText": "单猫MVP",
     "navigationBarBackgroundColor": "#f7f4ee",

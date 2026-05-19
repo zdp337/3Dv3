@@ -344,6 +344,39 @@ AI Agent 在每次开发任务完成后，**必须更新此文件**，追加本�
 ### 公共文件
 - 通用团队规则已上传至 `agent_teams_v1`，最新提交为 `73be769 feat: add reusable agent team rules`。
 
+---
+
+## 迭代 15：微信开发者工具 timeout 兼容处理
+
+### PM（组长）工作
+- 接收微信开发者工具运行时报错 `Error: timeout` 的验收反馈。
+- 安排先按“降低编译复杂度、保留核心验收功能”的策略处理，优先保证小程序能启动测试。
+
+### 研发成员 A — 小程序启动兼容优化
+- **负责模块**: `project.config / miniprogram/pages/index`
+- **工作内容**:
+  - 关闭开发者工具增强编译与 WXML/WXSS/JS 压缩，便于定位真实错误并降低 timeout 风险。
+  - 暂停首屏自动漫游定时器，减少初始化阶段循环刷新和本地存储写入。
+  - 将 WXML 中复杂三元 class 和 placeholder 表达式改为 JS 预计算字段，提升模板解析兼容性。
+- **修改文件**:
+  - `project.config.json`（修改）
+  - `miniprogram/pages/index/index.wxml`（修改）
+  - `miniprogram/pages/index/index.js`（修改）
+  - `.gitignore`（新建）
+  - `.codebuddy/rules/dev-history.mdc`（修改）
+
+
+### QA Agent 工作
+- **负责模块**: `小程序启动验证`
+- **工作内容**:
+  - 对修改文件进行 lint 检查，未发现新增报错。
+  - 建议用户重新打开微信开发者工具执行“清缓存并编译”。
+
+### 公共文件
+- 当前版本进入 timeout 兼容排查状态；若仍报错，需要补充微信开发者工具控制台完整首条业务错误或截图。
+
+
+
 
 
 

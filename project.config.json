@@ -1,19 +1,40 @@
 {
   "description": "单猫MVP微信小程序初始可验收版本",
   "packOptions": {
-    "ignore": []
+    "ignore": [],
+    "include": []
   },
   "setting": {
     "urlCheck": false,
     "es6": true,
     "enhance": true,
     "postcss": true,
-    "minified": true
+    "minified": true,
+    "compileWorklet": false,
+    "uglifyFileName": false,
+    "uploadWithSourceMap": true,
+    "packNpmManually": false,
+    "packNpmRelationList": [],
+    "minifyWXSS": false,
+    "minifyWXML": false,
+    "localPlugins": false,
+    "disableUseStrict": false,
+    "useCompilerPlugins": false,
+    "condition": false,
+    "swc": false,
+    "disableSWC": true,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    }
   },
   "compileType": "miniprogram",
   "libVersion": "3.7.0",
-  "appid": "touristappid",
+  "appid": "wxa3809d26c879f9aa",
   "projectname": "single-cat-mvp",
   "miniprogramRoot": "miniprogram/",
-  "condition": {}
+  "condition": {},
+  "simulatorPluginLibVersion": {},
+  "editorSetting": {}
 }

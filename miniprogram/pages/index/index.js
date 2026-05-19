@@ -141,12 +141,19 @@ Page({
     hasSelected: false,
     selectedCat: null,
     nameInputValue: "",
+    nameInputDisabled: true,
+    nameInputPlaceholder: "请先在首页选中猫咪",
     display: {},
     limits: [],
     actionBtns: [],
     canBless: false,
     blessButtonText: "祈愿",
+    homeTabClass: "active",
+    albumNavClass: "",
+    blessTabClass: "disabled",
+    albumTabClass: { collection: "active", calendar: "", scenes: "" },
     albumList: [],
+
     calendarTitle: "",
     calendarCells: [],
     sceneAlbum: [],
@@ -162,7 +169,7 @@ Page({
     this.blessingInProgress = false;
     this.state = this.loadState();
     this.refresh();
-    this.startWanderLoop();
+
   },
 
   onUnload() {
@@ -318,12 +325,23 @@ Page({
       hasSelected: Boolean(selected),
       selectedCat: selected,
       nameInputValue: selected ? selected.name : "",
+      nameInputDisabled: !selected,
+      nameInputPlaceholder: selected ? "请输入昵称" : "请先在首页选中猫咪",
       display: this.buildDisplay(selected),
       limits,
       actionBtns: limits,
       canBless,
       blessButtonText: selected && this.state.daily.blessed ? "已祈愿" : "祈愿",
+      homeTabClass: this.data.currentView === "home" ? "active" : "",
+      albumNavClass: this.data.currentView === "album" ? "active" : "",
+      blessTabClass: canBless ? "" : "disabled",
+      albumTabClass: {
+        collection: this.data.albumTab === "collection" ? "active" : "",
+        calendar: this.data.albumTab === "calendar" ? "active" : "",
+        scenes: this.data.albumTab === "scenes" ? "active" : "",
+      },
       albumList: this.state.album,
+
       calendarTitle: calendar.title,
       calendarCells: calendar.cells,
       sceneAlbum: this.buildSceneAlbum(),

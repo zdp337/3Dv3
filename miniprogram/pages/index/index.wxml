@@ -138,9 +138,10 @@
   </view>
 
   <view class="bottom-nav">
-    <button class="tab {{currentView === 'home' ? 'active' : ''}}" data-view="home" bindtap="switchView">首页</button>
-    <button class="tab bless {{!canBless ? 'disabled' : ''}}" bindtap="startBlessing">{{blessButtonText}}</button>
-    <button class="tab {{currentView === 'album' ? 'active' : ''}}" data-view="album" bindtap="switchView">图鉴</button>
+    <button class="tab {{homeTabClass}}" data-view="home" bindtap="switchView">首页</button>
+    <button class="tab bless {{blessTabClass}}" bindtap="startBlessing">{{blessButtonText}}</button>
+    <button class="tab {{albumNavClass}}" data-view="album" bindtap="switchView">图鉴</button>
+
   </view>
 
   <view wx:if="{{showBless}}" class="bless-overlay">

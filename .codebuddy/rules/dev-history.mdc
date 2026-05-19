@@ -323,6 +323,29 @@ AI Agent 在每次开发任务完成后，**必须更新此文件**，追加本�
 ### 公共文件
 - 当前项目已具备微信开发者工具导入验收条件，并准备同步到 GitHub 私有仓库。
 
+---
+
+## 迭代 14：通用团队规则仓库沉淀
+
+### PM（组长）工作
+- 确认将 PM、研发、QA 团队规则沉淀到独立 GitHub 仓库 `agent_teams_v1`，供后续项目复用。
+- 明确补充通用策划 Agent 规则，形成 PM + 策划 + Dev A-F + QA + 开发历史模板的完整团队规则包。
+
+### 研发成员 A — 团队规则仓库整理与推送
+- **负责模块**: `multi-agent-rules / agent_teams_v1`
+- **工作内容**:
+  - 将 `multi-agent-rules/.codebuddy/rules` 中的研发、PM、QA 规则整理到目标仓库。
+  - 新增通用 `agent-planner.mdc` 策划规则，用于其他项目建立策划角色。
+  - 新增通用 `dev-history.mdc` 开发历史模板和 `README.md` 使用说明。
+  - 推送到 GitHub 仓库 `https://github.com/zdp337/agent_teams_v1.git`。
+- **修改文件**:
+  - `.codebuddy/rules/dev-history.mdc`（修改）
+
+### 公共文件
+- 通用团队规则已上传至 `agent_teams_v1`，最新提交为 `73be769 feat: add reusable agent team rules`。
+
+
+
 
 
 

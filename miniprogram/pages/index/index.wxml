@@ -1,0 +1,171 @@
+<view class="page" data-scene="{{sceneConfig.key}}">
+  <view class="main">
+    <view wx:if="{{currentView === 'home'}}" class="view home-view">
+      <view class="scene-card">
+        <image class="scene-bg" src="{{sceneConfig.bg}}" mode="aspectFill" />
+        <view class="scene-shade"></view>
+
+        <view class="profile-card">
+          <view class="avatar-circle">头像</view>
+          <view class="profile-meta">
+            <view class="level-chip">Lv.{{display.level}}</view>
+            <view class="cat-name">{{display.name}}</view>
+            <view class="scene-name">{{display.sceneLine}}</view>
+          </view>
+        </view>
+
+        <view class="side-tools">
+          <button class="tool-entry" data-action="settings" bindtap="handleSideTool">
+            <view class="tool-circle">⚙</view><text>设置</text>
+          </button>
+          <button class="tool-entry" data-action="friends" bindtap="handleSideTool">
+            <view class="tool-circle">◎</view><text>好友</text>
+          </button>
+          <button class="tool-entry" data-action="mail" bindtap="handleSideTool">
+            <view class="tool-circle">✉</view><text>邮件</text>
+          </button>
+        </view>
+
+        <block wx:for="{{cats}}" wx:key="id">
+          <button class="cat-unit {{item.activeClass}}" style="left: {{item.x}}%; top: {{item.y}}%;" data-id="{{item.id}}" bindtap="selectCat">
+            {{item.emoji}}
+          </button>
+        </block>
+
+        <view class="status-bubble">{{display.state}}</view>
+
+        <view wx:if="{{hasSelected}}" class="interaction-panel">
+          <view class="growth-row">
+            <text>成长值 <text class="strong">{{display.growth}}</text></text>
+            <text>心情 <text class="strong">{{display.mood}}</text>/100</text>
+          </view>
+          <view class="progress"><view class="progress-fill" style="width: {{display.progress}}%;"></view></view>
+          <view class="actions-row">
+            <block wx:for="{{actionBtns}}" wx:key="key">
+              <button class="action-btn" disabled="{{item.disabled}}" data-action="{{item.key}}" bindtap="applyAction">{{item.label}} +{{item.gain}}</button>
+            </block>
+          </view>
+          <view class="limits">
+            <block wx:for="{{limits}}" wx:key="key">
+              <text>{{item.label}}：{{item.used}}/{{item.max}}</text>
+            </block>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view wx:elif="{{currentView === 'album'}}" class="view panel-view">
+      <view class="panel-card">
+        <view class="panel-title-row">
+          <text class="panel-title">图鉴系统</text>
+          <text class="muted">共 {{albumList.length}} 张</text>
+        </view>
+        <view class="album-tabs">
+          <button class="album-tab {{albumTab === 'collection' ? 'active' : ''}}" data-tab="collection" bindtap="switchAlbumTab">卡片收藏</button>
+          <button class="album-tab {{albumTab === 'calendar' ? 'active' : ''}}" data-tab="calendar" bindtap="switchAlbumTab">祈福日历</button>
+          <button class="album-tab {{albumTab === 'scenes' ? 'active' : ''}}" data-tab="scenes" bindtap="switchAlbumTab">场景图鉴</button>
+        </view>
+
+        <view wx:if="{{albumTab === 'collection'}}" class="album-panel">
+          <view wx:if="{{albumList.length === 0}}" class="empty-text">还没有卡片，先完成今日祈愿。</view>
+          <block wx:else>
+            <block wx:for="{{albumList}}" wx:key="id">
+              <view class="card-item">
+                <view class="card-title">{{item.date}} · {{item.scene}} · {{item.catName}}</view>
+                <view>{{item.fortune}} · {{item.keyword}}</view>
+              </view>
+            </block>
+          </block>
+
+        </view>
+
+        <view wx:elif="{{albumTab === 'calendar'}}" class="album-panel">
+          <view class="calendar-head">
+            <button class="mini-btn" bindtap="prevMonth">上月</button>
+            <text class="calendar-title">{{calendarTitle}}</text>
+            <button class="mini-btn" bindtap="nextMonth">下月</button>
+          </view>
+          <view class="week-row"><text>日</text><text>一</text><text>二</text><text>三</text><text>四</text><text>五</text><text>六</text></view>
+          <view class="calendar-grid">
+            <block wx:for="{{calendarCells}}" wx:key="key">
+              <view class="day-cell {{item.emptyClass}} {{item.blessedClass}}">
+                <text>{{item.day}}</text>
+                <view wx:if="{{item.mark}}" class="day-mark {{item.markClass}}">{{item.mark}}</view>
+              </view>
+            </block>
+          </view>
+          <view class="calendar-tip">有祈愿的日期会高亮，并显示主题标记。</view>
+        </view>
+
+        <view wx:else class="album-panel">
+          <block wx:for="{{sceneAlbum}}" wx:key="key">
+            <view class="scene-item {{item.lockedClass}}">
+              <view class="card-title">{{item.name}} · {{item.status}}</view>
+              <view class="muted">{{item.desc}}</view>
+            </view>
+          </block>
+        </view>
+      </view>
+    </view>
+
+    <view wx:else class="view panel-view">
+      <view class="panel-card">
+        <view class="panel-title">设置</view>
+        <view class="field">
+          <text>当前选中猫咪昵称</text>
+          <input value="{{nameInputValue}}" disabled="{{!hasSelected}}" placeholder="{{hasSelected ? '请输入昵称' : '请先在首页选中猫咪'}}" bindblur="changeName" />
+        </view>
+        <view class="field">
+          <text>场景主题</text>
+          <picker mode="selector" range="{{sceneOptions}}" range-key="name" value="{{sceneIndex}}" bindchange="changeScene">
+            <view class="picker-value">{{sceneConfig.name}}</view>
+          </picker>
+        </view>
+        <view class="switch-row">
+          <switch checked="{{state.soundEnabled}}" bindchange="toggleSound" />
+          <text>音效开关（占位）</text>
+        </view>
+        <view class="qa-tools">
+          <view class="qa-title">验收工具</view>
+          <view class="muted">用于微信开发者工具内反复回归测试</view>
+          <view class="qa-actions">
+            <button class="mini-btn" bindtap="resetDaily">重置今日次数</button>
+            <button class="mini-btn warn" bindtap="resetAll">清空全部存档</button>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="bottom-nav">
+    <button class="tab {{currentView === 'home' ? 'active' : ''}}" data-view="home" bindtap="switchView">首页</button>
+    <button class="tab bless {{!canBless ? 'disabled' : ''}}" bindtap="startBlessing">{{blessButtonText}}</button>
+    <button class="tab {{currentView === 'album' ? 'active' : ''}}" data-view="album" bindtap="switchView">图鉴</button>
+  </view>
+
+  <view wx:if="{{showBless}}" class="bless-overlay">
+    <view class="bless-stage">
+      <view class="bless-art">
+        <image class="bless-bg" src="{{sceneConfig.bg}}" mode="aspectFill" />
+        <view class="bless-mask"></view>
+        <view class="bless-glow"></view>
+        <view class="bless-cat">{{blessCatEmoji}}</view>
+        <view class="bless-scene-tag">{{sceneConfig.name}}祈愿</view>
+      </view>
+      <view class="bless-copy">
+        <view class="bless-tag">今日祈愿仪式</view>
+        <view class="bless-title">{{blessStageText}}</view>
+        <view class="muted center">{{blessStageSub}}</view>
+        <view wx:if="{{blessResult}}" class="bless-result">
+          <view class="card-title">{{blessResult.date}} · {{blessResult.scene}} · {{blessResult.fortune}}</view>
+          <view>{{blessResult.keyword}}</view>
+          <view class="muted">{{blessResult.catName}} 的祝福已收录至图鉴</view>
+        </view>
+        <view wx:if="{{blessResult}}" class="bless-actions">
+          <button class="mini-btn" bindtap="closeBless">收下并返回</button>
+          <button class="mini-btn primary" bindtap="goAlbumFromBless">查看图鉴</button>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

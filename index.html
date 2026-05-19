@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>单猫MVP · 竖屏交互Demo</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="page-wrap">
+    <div class="phone" data-scene="cafe" id="phone">
+      <main>
+        <section class="view active" id="view-home">
+          <article class="scene card" id="scene-stage">
+            <div class="scene-layer" id="scene-layer"></div>
+            <div class="cats-stage" id="cats-stage"></div>
+
+            <section class="profile-card" id="profile-card">
+              <div class="avatar-circle">头像</div>
+              <div class="profile-meta">
+                <div class="level-chip">Lv.<span id="level-value">-</span></div>
+                <h1 id="cat-name">玩家名字很长</h1>
+                <p id="scene-name">猫咖 · 等待互动</p>
+              </div>
+            </section>
+
+            <section class="side-tools" id="side-tools">
+              <button class="tool-entry" data-side-action="settings" title="设置">
+                <span class="tool-circle">⚙</span><span class="tool-label">设置</span>
+              </button>
+              <button class="tool-entry" data-side-action="friends" title="好友">
+                <span class="tool-circle">◎</span><span class="tool-label">好友</span>
+              </button>
+              <button class="tool-entry" data-side-action="mail" title="邮件">
+                <span class="tool-circle">✉</span><span class="tool-label">邮件</span>
+              </button>
+            </section>
+
+            <div class="status-bubble" id="cat-state">点任意猫咪开始互动</div>
+
+            <article class="card actions-card hidden" id="interaction-panel">
+              <section class="growth">
+                <div class="row between">
+                  <span>成长值 <strong id="growth-value">0</strong></span>
+                  <span>心情 <strong id="mood-value">75</strong>/100</span>
+                </div>
+                <div class="bar"><div id="progress-fill"></div></div>
+              </section>
+
+              <div class="row actions">
+                <button class="action-btn" data-action="pet">抚摸 +2</button>
+                <button class="action-btn" data-action="feed">喂食 +3</button>
+                <button class="action-btn" data-action="play">玩耍 +5</button>
+              </div>
+              <ul id="limits-list" class="limits"></ul>
+              <div id="fortune-result" class="fortune hidden"></div>
+            </article>
+          </article>
+        </section>
+
+        <section class="view" id="view-album">
+          <article class="card panel">
+            <div class="row between">
+              <h2>图鉴系统</h2>
+              <span id="collection-count">共 0 张</span>
+            </div>
+
+            <div class="row album-tabs" id="album-tabs">
+              <button class="album-tab active" data-album-tab="collection">卡片收藏</button>
+              <button class="album-tab" data-album-tab="calendar">祈福日历</button>
+              <button class="album-tab" data-album-tab="scenes">场景图鉴</button>
+            </div>
+
+            <section class="album-panel active" id="album-panel-collection">
+              <div id="album-list" class="album-list empty">还没有卡片，先完成今日祈福。</div>
+            </section>
+
+            <section class="album-panel" id="album-panel-calendar">
+              <div class="calendar-header row between">
+                <button id="month-prev" class="mini-btn">上月</button>
+                <strong id="calendar-title">2026-05</strong>
+                <button id="month-next" class="mini-btn">下月</button>
+              </div>
+              <div class="calendar-week row">
+                <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+              </div>
+              <div id="calendar-grid" class="calendar-grid"></div>
+              <p class="calendar-tip">有祈福的日期会高亮，并显示主题标记（咖/庭）</p>
+            </section>
+
+            <section class="album-panel" id="album-panel-scenes">
+              <div id="scene-album" class="scene-album"></div>
+            </section>
+          </article>
+        </section>
+
+        <section class="view" id="view-settings">
+          <article class="card panel">
+            <h2>设置</h2>
+            <label class="field">
+              <span>当前选中猫咪昵称</span>
+              <input id="name-input" type="text" maxlength="12" placeholder="请先在首页选中猫咪" />
+            </label>
+            <label class="field">
+              <span>场景主题</span>
+              <select id="scene-select">
+                <option value="cafe">猫咖主题</option>
+                <option value="courtyard">庭院主题</option>
+              </select>
+            </label>
+            <label class="switch">
+              <input id="sound-toggle" type="checkbox" checked />
+              <span>音效开关（占位）</span>
+            </label>
+            <section class="qa-tools">
+              <h3>验收工具</h3>
+              <p>用于快速回归，不影响正式逻辑</p>
+              <div class="row qa-actions">
+                <button class="mini-btn" id="reset-daily-btn" type="button">重置今日次数</button>
+                <button class="mini-btn warn-btn" id="reset-all-btn" type="button">清空全部存档</button>
+              </div>
+            </section>
+          </article>
+        </section>
+
+      </main>
+
+      <nav class="bottom-nav" id="tabs">
+        <button class="tab active" data-tab="home">首页</button>
+        <button class="tab tab-bless" id="bless-btn">祈愿</button>
+        <button class="tab" data-tab="album">图鉴</button>
+      </nav>
+
+      <section class="bless-overlay hidden" id="bless-overlay">
+        <div class="bless-stage">
+          <div class="bless-art" id="bless-art">
+            <div class="bless-glow"></div>
+            <div class="bless-cat" id="bless-cat">🐱</div>
+            <div class="bless-scene-tag" id="bless-scene-tag">猫咖祈福</div>
+          </div>
+          <div class="bless-copy">
+            <p class="bless-tag">今日祈福仪式</p>
+            <h3 id="bless-stage-text">准备中...</h3>
+            <p id="bless-stage-sub">请静心等待好运显现</p>
+            <div class="bless-result hidden" id="bless-result-card"></div>
+            <div class="row bless-actions hidden" id="bless-actions">
+              <button class="mini-btn" id="bless-close">收下并返回</button>
+              <button class="mini-btn primary-mini" id="bless-to-album">查看图鉴</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+  <script src="./app.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "pages": [
+    "pages/index/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "单猫MVP",
+    "navigationBarBackgroundColor": "#f7f4ee",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f2f4fb"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

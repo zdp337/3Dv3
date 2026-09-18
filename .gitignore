@@ -1,6 +1,5 @@
 project.private.config.json
 error_logs
-美术资源/
 tools/__pycache__/
 tools/_*.jpg
 tools/_*.png

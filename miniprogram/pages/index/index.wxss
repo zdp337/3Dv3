@@ -1,5 +1,5 @@
 .page {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   background: linear-gradient(180deg, #f8f9ff 0%, #f2f4fb 100%);
@@ -10,10 +10,13 @@
   flex: 1;
   min-height: 0;
   padding: 16rpx 20rpx 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .view {
-  height: 100%;
+  flex: 1;
+  min-height: 0;
 }
 
 .home-view {
@@ -43,11 +46,47 @@
   z-index: 1;
 }
 
+.scene-prop {
+  position: absolute;
+  display: block;
+}
+
+.prop-spin {
+  transform-origin: 50% 18%;
+  animation: propSpin 6s linear infinite;
+}
+
+.prop-sway {
+  transform-origin: 50% 0;
+  animation: propSway 3.2s ease-in-out infinite;
+}
+
+.prop-wobble {
+  transform-origin: 50% 100%;
+  animation: propWobble 2.6s ease-in-out infinite;
+}
+
+/* spin/sway 需要保留各自的居中位移，故在 keyframes 内携带 translate */
+@keyframes propSpin {
+  from { transform: translate(-50%, 0) rotate(0deg); }
+  to { transform: translate(-50%, 0) rotate(360deg); }
+}
+
+@keyframes propSway {
+  0%, 100% { transform: translate(-50%, 0) rotate(-5deg); }
+  50% { transform: translate(-50%, 0) rotate(5deg); }
+}
+
+@keyframes propWobble {
+  0%, 100% { transform: translate(-50%, -100%) rotate(-3deg); }
+  50% { transform: translate(-50%, -100%) rotate(3deg); }
+}
+
 .profile-card {
   position: absolute;
   left: 20rpx;
   top: 20rpx;
-  z-index: 5;
+  z-index: 600;
   max-width: 520rpx;
   display: flex;
   align-items: center;
@@ -109,7 +148,7 @@
   position: absolute;
   right: 16rpx;
   top: 20rpx;
-  z-index: 5;
+  z-index: 600;
   display: flex;
   flex-direction: column;
   gap: 14rpx;
@@ -147,30 +186,92 @@
 .cat-unit {
   position: absolute;
   z-index: 3;
-  width: 92rpx;
-  height: 92rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transform: translate(-50%, -50%);
-  border: 0;
-  border-radius: 24rpx;
-  background: rgba(255, 255, 255, 0.16);
-  font-size: 58rpx;
-  transition: transform 0.2s ease, background 0.2s ease;
+  width: 132rpx;
+  transform: translate(-50%, -78%);
+  transition-property: left, top;
+  transition-timing-function: ease-in-out;
 }
 
 .cat-unit.active {
-  z-index: 4;
-  background: rgba(255, 255, 255, 0.42);
-  box-shadow: 0 0 0 4rpx #fff, 0 0 0 8rpx rgba(94, 117, 255, 0.55);
+  z-index: 6;
+}
+
+.cat-flip {
+  width: 100%;
+  transform-origin: 50% 100%;
+}
+
+.cat-flip.flip {
+  transform: scaleX(-1);
+}
+
+.cat-body {
+  width: 100%;
+  transform-origin: 50% 100%;
+}
+
+.cat-img {
+  width: 100%;
+  display: block;
+}
+
+.cat-unit.active .cat-body {
+  filter: drop-shadow(0 0 4rpx #fff) drop-shadow(0 0 8rpx rgba(94, 117, 255, 0.85));
+}
+
+/* 待机：肚子起伏的呼吸 */
+.cat-body.idle {
+  animation: catBreathe 3.2s ease-in-out infinite;
+}
+
+/* 走动：轻微上下颠 */
+.cat-body.walk {
+  animation: catWalk 0.42s ease-in-out infinite;
+}
+
+/* 跳跃：起跳弧线 + 落地挤压（与 620ms 移动时长对齐） */
+.cat-body.jump {
+  animation: catJump 0.62s ease-in-out;
+}
+
+/* 理毛：左右轻晃 */
+.cat-body.groom {
+  animation: catGroom 0.7s ease-in-out infinite;
+}
+
+/* 打盹：更慢更浅的呼吸 */
+.cat-body.sleep {
+  animation: catBreathe 4.6s ease-in-out infinite;
+}
+
+@keyframes catBreathe {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(1.035) translateY(-3rpx); }
+}
+
+@keyframes catWalk {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6rpx); }
+}
+
+@keyframes catJump {
+  0% { transform: translateY(0) scaleY(0.92); }
+  20% { transform: translateY(-46rpx) scaleY(1.05); }
+  60% { transform: translateY(-46rpx) scaleY(1.02); }
+  88% { transform: translateY(0) scaleY(0.9); }
+  100% { transform: translateY(0) scaleY(1); }
+}
+
+@keyframes catGroom {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
 }
 
 .status-bubble {
   position: absolute;
   left: 20rpx;
   bottom: 22rpx;
-  z-index: 5;
+  z-index: 600;
   max-width: 360rpx;
   padding: 8rpx 14rpx;
   border: 2rpx solid #dce2ef;
@@ -185,12 +286,54 @@
   left: 20rpx;
   right: 20rpx;
   bottom: 76rpx;
-  z-index: 6;
+  z-index: 650;
   padding: 18rpx;
   border: 2rpx solid #e4e9f4;
   border-radius: 24rpx;
   background: rgba(255, 255, 255, 0.94);
   box-shadow: 0 14rpx 36rpx rgba(34, 41, 58, 0.1);
+}
+
+.panel-cat-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 14rpx;
+  padding-bottom: 14rpx;
+  border-bottom: 2rpx solid #eef1f8;
+}
+
+.panel-cat-emoji {
+  width: 76rpx;
+  height: 76rpx;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 4rpx solid #f19b9b;
+  background: #fff;
+  overflow: hidden;
+}
+
+.panel-cat-img {
+  width: 92%;
+  height: 92%;
+}
+
+.panel-cat-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.panel-cat-name-row {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.panel-cat-name-row .cat-name {
+  margin-top: 0;
 }
 
 .growth-row,
@@ -499,9 +642,11 @@ input,
 .bless-cat {
   position: absolute;
   left: 50%;
-  top: 48%;
+  top: 46%;
   transform: translate(-50%, -50%);
-  font-size: 140rpx;
+  width: 280rpx;
+  height: 280rpx;
+  filter: drop-shadow(0 8rpx 20rpx rgba(0, 0, 0, 0.25));
 }
 
 .bless-scene-tag {

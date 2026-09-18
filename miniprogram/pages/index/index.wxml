@@ -1,40 +1,57 @@
 <view class="page" data-scene="{{sceneConfig.key}}">
   <view class="main">
     <view wx:if="{{currentView === 'home'}}" class="view home-view">
-      <view class="scene-card">
+      <view class="scene-card" bindtap="closeInteraction">
         <image class="scene-bg" src="{{sceneConfig.bg}}" mode="aspectFill" />
         <view class="scene-shade"></view>
+
+        <block wx:for="{{sceneProps}}" wx:key="key">
+          <image class="scene-prop {{item.animClass}}" src="{{item.src}}" style="{{item.style}}" mode="widthFix" />
+        </block>
 
         <view class="profile-card">
           <view class="avatar-circle">头像</view>
           <view class="profile-meta">
-            <view class="level-chip">Lv.{{display.level}}</view>
-            <view class="cat-name">{{display.name}}</view>
-            <view class="scene-name">{{display.sceneLine}}</view>
+            <view class="cat-name">{{playerInfo.name}}</view>
+            <view class="scene-name">{{sceneConfig.name}}</view>
           </view>
         </view>
 
         <view class="side-tools">
-          <button class="tool-entry" data-action="settings" bindtap="handleSideTool">
+          <button class="tool-entry" data-action="settings" catchtap="handleSideTool">
             <view class="tool-circle">⚙</view><text>设置</text>
           </button>
-          <button class="tool-entry" data-action="friends" bindtap="handleSideTool">
+          <button class="tool-entry" data-action="friends" catchtap="handleSideTool">
             <view class="tool-circle">◎</view><text>好友</text>
           </button>
-          <button class="tool-entry" data-action="mail" bindtap="handleSideTool">
+          <button class="tool-entry" data-action="mail" catchtap="handleSideTool">
             <view class="tool-circle">✉</view><text>邮件</text>
           </button>
         </view>
 
         <block wx:for="{{cats}}" wx:key="id">
-          <button class="cat-unit {{item.activeClass}}" style="left: {{item.x}}%; top: {{item.y}}%;" data-id="{{item.id}}" bindtap="selectCat">
-            {{item.emoji}}
-          </button>
+          <view class="cat-unit {{item.activeClass}}" style="{{item.style}}" data-id="{{item.id}}" catchtap="selectCat">
+            <view class="cat-flip {{item.flipClass}}">
+              <view class="cat-body {{item.actionClass}}">
+                <image class="cat-img" src="{{item.pose}}" mode="widthFix" />
+              </view>
+            </view>
+          </view>
         </block>
 
-        <view class="status-bubble">{{display.state}}</view>
+        <view wx:if="{{!hasSelected}}" class="status-bubble">点任意猫咪开始互动</view>
 
-        <view wx:if="{{hasSelected}}" class="interaction-panel">
+        <view wx:if="{{hasSelected}}" class="interaction-panel" catchtap="noop">
+          <view class="panel-cat-row">
+            <view class="panel-cat-emoji"><image class="panel-cat-img" src="{{display.pose}}" mode="aspectFit" /></view>
+            <view class="panel-cat-meta">
+              <view class="panel-cat-name-row">
+                <view class="level-chip">Lv.{{display.level}}</view>
+                <text class="cat-name">{{display.name}}</text>
+              </view>
+              <view class="scene-name">{{display.state}}</view>
+            </view>
+          </view>
           <view class="growth-row">
             <text>成长值 <text class="strong">{{display.growth}}</text></text>
             <text>心情 <text class="strong">{{display.mood}}</text>/100</text>
@@ -150,7 +167,7 @@
         <image class="bless-bg" src="{{sceneConfig.bg}}" mode="aspectFill" />
         <view class="bless-mask"></view>
         <view class="bless-glow"></view>
-        <view class="bless-cat">{{blessCatEmoji}}</view>
+        <image class="bless-cat" src="{{blessCatPose}}" mode="aspectFit" />
         <view class="bless-scene-tag">{{sceneConfig.name}}祈愿</view>
       </view>
       <view class="bless-copy">
